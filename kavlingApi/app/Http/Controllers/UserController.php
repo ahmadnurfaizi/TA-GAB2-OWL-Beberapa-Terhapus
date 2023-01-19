@@ -10,40 +10,30 @@ use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
-        /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-
-             // Function Index digunakan untuk menampilkan 1 data
-             public function show($id)
-             {
-                 $data = Users::where("users.id_users",$id)->get();
-
-                 if($data){
-                     return ApiFormatter::createApi(200, 'Success', $data);
-                 } else {
-                     return ApiFormatter::createApi(400, 'Failed');
-                 }
-             }
-
+    // Function destroy digunakan untuk menghapus data
+    public function destroy($id)
+    {
+        $data = Users::findOrFail($id)->delete();
+        return ApiFormatter::createApi(200, 'Success Delete');
+    }
 
     public function login(Request $request)
     {
-        try {
-
+        try
+        {
             $data = Users::where('username', '=', $request->username)->where('password', '=', $request->password)->get();
-
-            if ($data) {
+            if ($data)
+            {
                 return ApiFormatter::createApi(200, 'Success Login', $data);
-            } else {
+            }
+            else
+            {
                 return ApiFormatter::createApi(400, 'users/Password Wrong!');
             }
-        } catch (Exception) {
+        }
+        catch (Exception)
+        {
             return ApiFormatter::createApi(400, 'Failed');
         }
     }
-
 }
